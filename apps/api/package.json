@@ -1,0 +1,9 @@
+{
+  "name": "@wds/api",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Backend placeholder for Buổi 4",
+  "scripts": {
+    "build": "node -e \"console.log('API placeholder: implemented in Buổi 4')\""
+  }
+}

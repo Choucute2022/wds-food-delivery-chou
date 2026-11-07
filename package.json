@@ -1,0 +1,13 @@
+{
+  "name": "wds-food-delivery-chou",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@12.15.0",
+  "scripts": {
+    "dev": "pnpm -C apps/web dev",
+    "build": "pnpm -C apps/web build",
+    "lint": "pnpm -C apps/web lint",
+    "check": "node scripts/check-repo.mjs",
+    "check:build": "node scripts/check-repo.mjs --build"
+  }
+}
