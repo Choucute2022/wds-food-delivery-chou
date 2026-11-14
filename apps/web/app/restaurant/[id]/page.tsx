@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Bike, Clock, Star } from "lucide-react";
 
+import { AddToCartButton } from "@/components/add-to-cart-button";
 import { buttonVariants } from "@/components/ui/button";
 import {
   Card,
@@ -147,7 +148,7 @@ export default async function RestaurantPage({
                         <span className="text-base font-semibold">
                           {formatVnd(item.price)}
                         </span>
-                        <span className="text-xs text-muted-foreground">{category}</span>
+                        <AddToCartButton menuItem={item} restaurant={restaurant} />
                       </CardFooter>
                     </Card>
                   ))}
