@@ -13,9 +13,11 @@ export const customerFields = {
     .string()
     .trim()
     .min(1, "Vui lòng nhập số điện thoại.")
-    .refine(
-      (value) => /^(?:0\d{9}|\+84\d{9})$/.test(value.replace(/[\s-]/g, "")),
-      PHONE_INVALID_MESSAGE,
+    .transform((value) => value.replace(/[\s-]/g, ""))
+    .pipe(
+      z
+        .string()
+        .regex(/^(?:0\d{9}|\+84\d{9})$/, PHONE_INVALID_MESSAGE),
     ),
   address: z
     .string()
