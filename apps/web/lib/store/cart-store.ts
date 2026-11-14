@@ -112,10 +112,10 @@ export function selectTotalQuantity(state: CartState): number {
   return state.items.reduce((total, item) => total + item.quantity, 0);
 }
 
-export function selectCartGroups(state: CartState): RestaurantCartGroup[] {
+export function getCartGroups(items: CartItem[]): RestaurantCartGroup[] {
   const groups = new Map<string, RestaurantCartGroup>();
 
-  for (const item of state.items) {
+  for (const item of items) {
     const group = groups.get(item.restaurantId);
 
     if (group) {
@@ -136,20 +136,17 @@ export function selectCartGroups(state: CartState): RestaurantCartGroup[] {
   return [...groups.values()];
 }
 
-export function selectGrandSubtotal(state: CartState): number {
-  return state.items.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0,
-  );
+export function getCartSubtotal(items: CartItem[]): number {
+  return items.reduce((total, item) => total + item.price * item.quantity, 0);
 }
 
-export function selectDeliveryFeeTotal(state: CartState): number {
-  return selectCartGroups(state).reduce(
+export function getDeliveryFeeTotal(items: CartItem[]): number {
+  return getCartGroups(items).reduce(
     (total, group) => total + group.deliveryFee,
     0,
   );
 }
 
-export function selectGrandTotal(state: CartState): number {
-  return selectGrandSubtotal(state) + selectDeliveryFeeTotal(state);
+export function getCartTotal(items: CartItem[]): number {
+  return getCartSubtotal(items) + getDeliveryFeeTotal(items);
 }

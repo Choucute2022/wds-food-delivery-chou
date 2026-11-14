@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
 
-import { CartBadge } from "@/components/cart-badge";
+import { CartDrawer } from "@/components/cart-drawer";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 
@@ -36,7 +36,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <SiteHeader />
         <main className="flex-1">{children}</main>
         <SiteFooter />
-        <CartBadge />
+        <CartDrawer />
         <Toaster richColors position="top-center" />
       </body>
     </html>
