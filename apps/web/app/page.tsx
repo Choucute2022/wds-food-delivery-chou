@@ -9,6 +9,7 @@ import {
   Star,
 } from "lucide-react";
 
+import { LazyImage } from "@/components/lazy-image";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Card,
@@ -117,7 +118,8 @@ export default function Home() {
                     alt={`Ảnh minh hoạ ${heroRestaurant.name}`}
                     fill
                     priority
-                    sizes="(max-width: 768px) 100vw, 448px"
+                    quality={55}
+                    sizes="(max-width: 768px) 92vw, 448px"
                     className="object-cover"
                   />
                 </div>
@@ -170,11 +172,12 @@ export default function Home() {
           {restaurants.map((restaurant) => (
             <Card key={restaurant.id} className="gap-0 overflow-hidden pt-0">
               <div className="relative aspect-[4/3]">
-                <Image
+                <LazyImage
                   src={restaurant.imageUrl}
                   alt={`Ảnh minh hoạ ${restaurant.name}`}
                   fill
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  sizes="(max-width: 640px) 92vw, (max-width: 1024px) 46vw, 30vw"
+                  quality={55}
                   className="object-cover"
                 />
               </div>
@@ -250,11 +253,12 @@ export default function Home() {
               return (
                 <Card key={dish.id} className="gap-0 overflow-hidden pt-0">
                   <div className="relative aspect-[16/10]">
-                    <Image
+                    <LazyImage
                       src={dish.imageUrl}
                       alt={`Ảnh minh hoạ ${dish.name}`}
                       fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      sizes="(max-width: 640px) 92vw, (max-width: 1024px) 46vw, 30vw"
+                      quality={55}
                       className="object-cover"
                     />
                   </div>

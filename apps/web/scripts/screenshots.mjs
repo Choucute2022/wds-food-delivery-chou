@@ -16,6 +16,9 @@ async function waitForToastsToClear(page) {
 }
 
 async function capture(page, fileName, fullPage = true) {
+  if (fullPage) {
+    await primeLazyImages(page);
+  }
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.waitForTimeout(250);
   await page.screenshot({
@@ -23,6 +26,37 @@ async function capture(page, fileName, fullPage = true) {
     fullPage,
   });
   console.log(`saved ${fileName}`);
+}
+
+/** Scrolls the page so images that wait for the viewport are actually loaded. */
+async function primeLazyImages(page) {
+  const height = await page.evaluate(() => document.body.scrollHeight);
+  const step = 600;
+
+  for (let y = 0; y <= height; y += step) {
+    await page.evaluate((top) => window.scrollTo(0, top), y);
+    await page.waitForTimeout(180);
+  }
+
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.waitForTimeout(400);
+
+  // React mounts the images asynchronously after the observer fires, so wait
+  // until the number of images is stable and none is still loading.
+  let previousCount = -1;
+  for (let attempt = 0; attempt < 20; attempt += 1) {
+    const state = await page.evaluate(() => ({
+      count: document.images.length,
+      pending: Array.from(document.images).filter((img) => !img.complete).length,
+    }));
+
+    if (state.count === previousCount && state.pending === 0) {
+      break;
+    }
+
+    previousCount = state.count;
+    await page.waitForTimeout(250);
+  }
 }
 
 async function addFirstDish(page, restaurantId, times = 1) {
@@ -63,14 +97,8 @@ async function main() {
   });
   const mobilePage = await mobileContext.newPage();
   await mobilePage.goto(baseURL, { waitUntil: "networkidle" });
-  await mobilePage.evaluate(() => window.scrollTo(0, 0));
-  await mobilePage.waitForTimeout(250);
-  await mobilePage.screenshot({
-    path: path.join(outputDir, "home-mobile.png"),
-    fullPage: true,
-  });
+  await capture(mobilePage, "home-mobile.png");
   await mobileContext.close();
-  console.log("saved home-mobile.png");
 
   // Build a multi-restaurant cart
   await addFirstDish(page, "bun-bo-co-ba", 2);

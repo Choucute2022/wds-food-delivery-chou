@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, Bike, Clock, Star } from "lucide-react";
 
 import { AddToCartButton } from "@/components/add-to-cart-button";
+import { LazyImage } from "@/components/lazy-image";
 import { buttonVariants } from "@/components/ui/button";
 import {
   Card,
@@ -68,6 +69,7 @@ export default async function RestaurantPage({
             alt={`Ảnh nhà hàng ${restaurant.name}`}
             fill
             priority
+            quality={70}
             sizes="(max-width: 768px) 100vw, 1152px"
             className="object-cover"
           />
@@ -132,11 +134,12 @@ export default async function RestaurantPage({
                   {items.map((item) => (
                     <Card key={item.id} className="gap-0 overflow-hidden pt-0">
                       <div className="relative aspect-[16/10]">
-                        <Image
+                        <LazyImage
                           src={item.imageUrl}
                           alt={`Ảnh món ${item.name}`}
                           fill
-                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                          sizes="(max-width: 640px) 92vw, (max-width: 1024px) 46vw, 30vw"
+                          quality={55}
                           className="object-cover"
                         />
                       </div>
