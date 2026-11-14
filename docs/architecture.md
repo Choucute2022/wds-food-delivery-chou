@@ -19,7 +19,7 @@ flowchart LR
 
 ```mermaid
 flowchart TD
-  Layout["app/layout.tsx<br/>Header · Footer · Toaster"] --> Home["/  (Server Component)"]
+  Layout["app/layout.tsx<br/>Header · Footer · Cart Drawer · Toaster"] --> Home["/  (Server Component)"]
   Layout --> Restaurant["/restaurant/[id]  (Server Component)"]
   Restaurant --> Loading["loading.tsx"]
   Restaurant --> Error["error.tsx"]
@@ -42,7 +42,7 @@ flowchart TD
 | Nút thêm món | Client Component | Gọi action của cart store, hiện toast |
 | Cart Drawer, floating badge | Client Component | Đọc store, tương tác, phụ thuộc LocalStorage |
 | Form checkout | Client Component | React Hook Form, trạng thái submit |
-| Trang xác nhận | Client/Server kết hợp | Đọc `codes` từ query string, hiển thị kết quả |
+| Trang xác nhận | Server Component | Đọc `codes` từ query string (async `searchParams`), render mã đơn, chịu được refresh |
 | `POST /api/orders` | Route Handler | Nhận request, tra mock data, trả JSON |
 
 Nguyên tắc: mặc định Server Component; chỉ thêm `"use client"` ở biên cần tương tác.
@@ -124,6 +124,8 @@ sequenceDiagram
   UI->>Store: clearCart()
   UI->>D: chuyển tới /checkout/success?codes=...
 ```
+
+Route Handler validate lại payload bằng Zod (cùng schema với form), trả `400` kèm thông báo tiếng Việt khi dữ liệu sai, chờ khoảng 400 ms rồi trả `201 { orders }`. Form chỉ `clearCart()` sau khi nhận 2xx, nên lỗi mạng hoặc lỗi server vẫn giữ nguyên giỏ.
 
 ## 6. Quyết định liên quan
 

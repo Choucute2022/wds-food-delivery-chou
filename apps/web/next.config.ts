@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  images: {
+    qualities: [55, 70, 75],
+  },
   turbopack: {
     rules: {
       "*.css": {
