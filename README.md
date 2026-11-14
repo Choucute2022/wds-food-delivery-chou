@@ -12,7 +12,19 @@
 
 ## Ảnh chụp màn hình
 
-Cập nhật sau khi hoàn thiện giao diện.
+| Trang chủ | Nhà hàng |
+|---|---|
+| ![Trang chủ WDS Food](docs/screenshots/home.png) | ![Trang nhà hàng với thực đơn](docs/screenshots/restaurant.png) |
+
+| Giỏ hàng đa nhà hàng | Thanh toán |
+|---|---|
+| ![Cart Drawer nhóm món theo nhà hàng](docs/screenshots/cart-drawer.png) | ![Form thanh toán với thông tin giao hàng](docs/screenshots/checkout.png) |
+
+| Đặt hàng thành công | Trang chủ trên mobile |
+|---|---|
+| ![Màn hình xác nhận kèm mã đơn từng nhà hàng](docs/screenshots/success.png) | ![Trang chủ ở khung nhìn 375px](docs/screenshots/home-mobile.png) |
+
+Bộ ảnh được tạo tự động bằng Playwright: chạy `pnpm build`, `pnpm -C apps/web start` ở terminal khác, rồi `pnpm screenshots`.
 
 ## Yêu cầu môi trường
 
@@ -44,7 +56,7 @@ Lệnh này bật Postgres 16 tại `localhost:5432` (user/password/database: `w
 apps/
   web/            Next.js 16 App Router
   api/            Placeholder cho Buổi 4
-docs/             PRD, architecture, ADR, tài liệu cho agent
+docs/             PRD, architecture, ADR, tài liệu cho agent, ảnh chụp màn hình
 scripts/          check-repo.mjs
 ```
 
@@ -57,6 +69,7 @@ scripts/          check-repo.mjs
 | `pnpm lint` | Kiểm tra ESLint |
 | `pnpm check` | Chạy checker của khoá học |
 | `pnpm check:build` | Checker + build |
+| `pnpm screenshots` | Chụp lại bộ ảnh trong `docs/screenshots` (cần production server đang chạy) |
 
 ## Server và Client Component
 
@@ -65,6 +78,16 @@ Trang chủ và trang nhà hàng là **Server Component**: chúng đọc mock da
 ## Giỏ hàng
 
 Một giỏ có thể chứa món từ nhiều nhà hàng. Khi đặt hàng, hệ thống tạo **một đơn cho mỗi nhà hàng**, mỗi đơn có mã riêng và phí giao riêng. Lý do và các phương án bị loại được ghi trong [ADR-0001](docs/adr/0001-multi-restaurant-cart.md).
+
+## Đặt hàng (mock API)
+
+`POST /api/orders` là Route Handler giả lập backend, có độ trễ khoảng 400 ms.
+
+- Request: `{ items: { menuItemId, quantity }[], customer: { fullName, phone, address }, note? }`.
+- Client chỉ gửi mã món và số lượng; server tra mock data, tự tính giá, phí giao và tổng tiền.
+- Server tách đơn theo nhà hàng, trả `201 { orders: [...] }` với mã dạng `FD-YYYYMMDD-XXXX`.
+- Dữ liệu sai (món không tồn tại, số lượng ≤ 0, giỏ trống, họ tên/điện thoại/địa chỉ không hợp lệ) trả `400` kèm thông báo tiếng Việt.
+- Thành công: chuyển tới `/checkout/success?codes=...` (tải lại trang vẫn giữ mã đơn) và **chỉ xóa giỏ khi API trả 2xx**.
 
 ## Kiểm tra bài
 

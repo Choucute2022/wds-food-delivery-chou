@@ -8,6 +8,7 @@
     "build": "pnpm -C apps/web build",
     "lint": "pnpm -C apps/web lint",
     "check": "node scripts/check-repo.mjs",
-    "check:build": "node scripts/check-repo.mjs --build"
+    "check:build": "node scripts/check-repo.mjs --build",
+    "screenshots": "pnpm -C apps/web screenshots"
   }
 }
