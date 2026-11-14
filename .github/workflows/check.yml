@@ -34,3 +34,10 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm -C apps/web build
       - run: pnpm dlx @lhci/cli@0.14.0 autorun --config=./lighthouserc.json
+      - name: Lưu báo cáo Lighthouse
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-report
+          path: .lighthouseci
+          retention-days: 7
